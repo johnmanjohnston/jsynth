@@ -155,10 +155,10 @@ void JsynthAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, juce:
         {
             // Osc control
             // ADSR
-            // other shit
         }
     }
 
+    keyboardState.processNextMidiBuffer(midiMessages, 0, buffer.getNumSamples(), true);
     synth.renderNextBlock(buffer, midiMessages, 0, buffer.getNumSamples());
 }
 

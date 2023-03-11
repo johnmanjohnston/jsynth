@@ -64,6 +64,14 @@ private:
         }
     };
 
+    // Bass saw wave, slight detune
+    juce::dsp::Oscillator<float> osc5
+    { [](float x)
+        {
+            return SAW_WAVE(x);
+        }
+    };
+
     juce::dsp::Gain<float> gain;
     bool isPrepared{ false };
-};
+}; 

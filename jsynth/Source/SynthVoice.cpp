@@ -28,6 +28,7 @@ void SynthVoice::startNote(int midiNoteNumber, float velocity, juce::Synthesiser
     osc2.setFrequency((juce::MidiMessage::getMidiNoteInHertz(midiNoteNumber) / 2.f ) + 1.5f);
     osc3.setFrequency((juce::MidiMessage::getMidiNoteInHertz(midiNoteNumber) * 2.f) - 1.2f);
     osc4.setFrequency((juce::MidiMessage::getMidiNoteInHertz(midiNoteNumber) / 2.f));
+    osc5.setFrequency((juce::MidiMessage::getMidiNoteInHertz(midiNoteNumber) / 2.f) + 1.2f);
 }
 
 bool SynthVoice::canPlaySound(juce::SynthesiserSound* sound)
@@ -49,6 +50,7 @@ void SynthVoice::renderNextBlock(juce::AudioBuffer<float>& outputBuffer, int sta
     osc2.process(juce::dsp::ProcessContextReplacing<float>(audoBlock));
     osc3.process(juce::dsp::ProcessContextReplacing<float>(audoBlock));
     osc4.process(juce::dsp::ProcessContextReplacing<float>(audoBlock));
+    osc5.process(juce::dsp::ProcessContextReplacing<float>(audoBlock));
     gain.process(juce::dsp::ProcessContextReplacing<float>(audoBlock));
     adsr.applyEnvelopeToBuffer(outputBuffer, startSample, numSamples);
 }
@@ -57,7 +59,7 @@ void SynthVoice::prepareToPlay(double sampleRate, int samplesPerBlock, int outpu
 {
     DBG("prepareToPlay()");
 
-    adsrParams.attack = 0.1f;
+    adsrParams.attack = 0.f;
     adsrParams.decay = 3.f;
     adsrParams.sustain = 0.3f;
     adsrParams.release = 0.35f;
@@ -74,6 +76,7 @@ void SynthVoice::prepareToPlay(double sampleRate, int samplesPerBlock, int outpu
     osc2.prepare(spec);
     osc3.prepare(spec);
     osc4.prepare(spec);
+    osc5.prepare(spec);
     gain.prepare(spec);
     gain.setGainLinear(0.5f);
 
