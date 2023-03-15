@@ -24,8 +24,11 @@ JsynthAudioProcessor::JsynthAudioProcessor()
                        )
 #endif
 {
-    synth.addSound(new SynthSound());
+    synth.clearSounds();
+    synth.clearVoices();
+
     synth.addVoice(new SynthVoice());
+    synth.addSound(new SynthSound());
 }
 
 JsynthAudioProcessor::~JsynthAudioProcessor()
@@ -148,15 +151,6 @@ void JsynthAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, juce:
 
     for (auto i = totalNumInputChannels; i < totalNumOutputChannels; ++i)
         buffer.clear (i, 0, buffer.getNumSamples());
-
-    for (int i = 0; i < synth.getNumVoices(); ++i) 
-    {
-        if (auto voice = dynamic_cast<juce::SynthesiserVoice*>(synth.getVoice(i))) 
-        {
-            // Osc control
-            // ADSR
-        }
-    }
 
     keyboardState.processNextMidiBuffer(midiMessages, 0, buffer.getNumSamples(), true);
     synth.renderNextBlock(buffer, midiMessages, 0, buffer.getNumSamples());

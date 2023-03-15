@@ -15,6 +15,9 @@ JsynthAudioProcessorEditor::JsynthAudioProcessorEditor (JsynthAudioProcessor& p)
 {
     setSize(this->WINDOW_WIDTH, this->WINDOW_HEIGHT);
     addAndMakeVisible(keyboardComponent);
+
+    addAndMakeVisible(attackLabel);
+    addAndMakeVisible(attackSlider);
 }
 
 JsynthAudioProcessorEditor::~JsynthAudioProcessorEditor()
@@ -33,5 +36,6 @@ void JsynthAudioProcessorEditor::paint (juce::Graphics& g)
 
 void JsynthAudioProcessorEditor::resized()
 {
-    keyboardComponent.setBounds(getLocalBounds());
+    attackSlider.setBounds(getLocalBounds());
+    keyboardComponent.setBounds(0, (WINDOW_HEIGHT / 3) + WINDOW_HEIGHT / 3 + 1, WINDOW_WIDTH, WINDOW_HEIGHT / 3);
 }

@@ -44,7 +44,7 @@ private:
     juce::dsp::Oscillator<float> osc2
     { [](float x)
         {
-            return SAW_WAVE(x);
+            return SQUARE_WAVE(x);
         }
     };
 
@@ -60,7 +60,7 @@ private:
     juce::dsp::Oscillator<float> osc4
     { [](float x)
         {
-            return SINE_WAVE(x);
+            return SAW_WAVE(x);
         }
     };
 
@@ -68,7 +68,7 @@ private:
     juce::dsp::Oscillator<float> osc5
     { [](float x)
         {
-            return SAW_WAVE(x);
+           return SQUARE_WAVE(x);
         }
     };
 

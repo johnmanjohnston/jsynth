@@ -17,9 +17,12 @@ private:
     JsynthAudioProcessor& audioProcessor;
     juce::MidiKeyboardComponent keyboardComponent;
 
+    juce::Slider attackSlider;
+    juce::Label attackLabel;
+
     const uint32_t ASPECT_RATIO_MULTIPLIER = 7;
     const uint32_t ASPECT_RATIO_X = 110;
-    const uint32_t ASPECT_RATIO_Y = 14;
+    const uint32_t ASPECT_RATIO_Y = 21;
     const uint32_t WINDOW_WIDTH = ASPECT_RATIO_X * ASPECT_RATIO_MULTIPLIER;
     const uint32_t WINDOW_HEIGHT = ASPECT_RATIO_Y * ASPECT_RATIO_MULTIPLIER;
 
