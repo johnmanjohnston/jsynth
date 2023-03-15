@@ -26,7 +26,7 @@ void SynthVoice::startNote(int midiNoteNumber, float velocity, juce::Synthesiser
     adsr.noteOn();
     
  mainOsc.setFrequency( juce::MidiMessage::getMidiNoteInHertz(midiNoteNumber));
-    osc2.setFrequency((juce::MidiMessage::getMidiNoteInHertz(midiNoteNumber + 12) / 2.f ) + 1.5f);
+    osc2.setFrequency((juce::MidiMessage::getMidiNoteInHertz(midiNoteNumber + 12) / 2.f ) + 1.2f);
     osc3.setFrequency((juce::MidiMessage::getMidiNoteInHertz(midiNoteNumber) * 2.f) - 1.2f);
     osc4.setFrequency((juce::MidiMessage::getMidiNoteInHertz(midiNoteNumber) / 2.f));
     osc5.setFrequency((juce::MidiMessage::getMidiNoteInHertz(midiNoteNumber) / 2.f) + 1.2f);
@@ -59,7 +59,7 @@ void SynthVoice::prepareToPlay(double sampleRate, int samplesPerBlock, int outpu
 {
     DBG("prepareToPlay()");
 
-    adsrParams.attack = 0.3f;
+    adsrParams.attack = 0.1f;
     adsrParams.decay = 5.f;
     adsrParams.sustain = 1.f;
     adsrParams.release = 0.5f;
