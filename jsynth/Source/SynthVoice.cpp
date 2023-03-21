@@ -24,13 +24,15 @@ void SynthVoice::stopNote(float velocity, bool allowTailOff)
 void SynthVoice::startNote(int midiNoteNumber, float velocity, juce::SynthesiserSound* sound, int currentPitchWheelPosition)
 {
     adsr.noteOn();
-    //osc.setFrequency(juce::MidiMessage::getMidiNoteInHertz(midiNoteNumber));
-    //osc2.setFrequency(juce::MidiMessage::getMidiNoteInHertz(midiNoteNumber - 12) + 1.25f);
 
     for (int i = 0; i < oscCount; ++i) {
-        oscillators[i].setFrequency(juce::MidiMessage::getMidiNoteInHertz(midiNoteNumber) + i - 1);
-    }
+        auto targetFrequency = juce::MidiMessage::getMidiNoteInHertz(midiNoteNumber);
 
+        if (i % 2 != 0) { targetFrequency -= i*i; }
+        else { targetFrequency += i*i; }
+
+        oscillators[i].setFrequency(targetFrequency);
+    }
 }
 
 bool SynthVoice::canPlaySound(juce::SynthesiserSound* sound)
@@ -46,8 +48,6 @@ void SynthVoice::renderNextBlock(juce::AudioBuffer<float>& outputBuffer, int sta
 {
     juce::AudioBuffer<float> synthesisBufferProxy(outputBuffer.getArrayOfWritePointers(), 2, 0, numSamples);
     juce::dsp::AudioBlock<float> audoBlock{ synthesisBufferProxy };
-    //osc.process(juce::dsp::ProcessContextReplacing<float>(audoBlock));
-    //osc2.process(juce::dsp::ProcessContextReplacing<float>(audoBlock));
 
     for (int i = 0; i < oscCount; ++i) {
         oscillators[i].process(juce::dsp::ProcessContextReplacing<float>(audoBlock));
@@ -82,8 +82,6 @@ void SynthVoice::prepareToPlay(double sampleRate, int samplesPerBlock, int outpu
         oscillators[i].prepare(spec);
     }
 
-    //osc.prepare(spec);
-    //osc2.prepare(spec);
     gain.prepare(spec);
     gain.setGainLinear(0.1f);
 
