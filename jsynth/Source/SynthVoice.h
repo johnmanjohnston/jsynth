@@ -32,8 +32,11 @@ private:
     juce::ADSR::Parameters adsrParams;
     juce::ADSR adsr;
 
-    juce::dsp::Oscillator<float> osc{ [](float x) { return SAW_WAVE(x); } };
-    juce::dsp::Oscillator<float> osc2{ [](float x) { return SAW_WAVE(x); } };
+    // juce::dsp::Oscillator<float> osc{ [](float x) { return SAW_WAVE(x); } };
+    // juce::dsp::Oscillator<float> osc2{ [](float x) { return SAW_WAVE(x); } };
+
+                              int oscCount = 3;
+    juce::dsp::Oscillator<float> oscillators[3];
 
     juce::dsp::Gain<float> gain;
     bool isPrepared{ false };

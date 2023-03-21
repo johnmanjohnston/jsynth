@@ -24,8 +24,13 @@ void SynthVoice::stopNote(float velocity, bool allowTailOff)
 void SynthVoice::startNote(int midiNoteNumber, float velocity, juce::SynthesiserSound* sound, int currentPitchWheelPosition)
 {
     adsr.noteOn();
-    osc.setFrequency(juce::MidiMessage::getMidiNoteInHertz(midiNoteNumber));
-    osc2.setFrequency(juce::MidiMessage::getMidiNoteInHertz(midiNoteNumber - 12) + 1.25f);
+    //osc.setFrequency(juce::MidiMessage::getMidiNoteInHertz(midiNoteNumber));
+    //osc2.setFrequency(juce::MidiMessage::getMidiNoteInHertz(midiNoteNumber - 12) + 1.25f);
+
+    for (int i = 0; i < oscCount; ++i) {
+        oscillators[i].setFrequency(juce::MidiMessage::getMidiNoteInHertz(midiNoteNumber) + i - 1);
+    }
+
 }
 
 bool SynthVoice::canPlaySound(juce::SynthesiserSound* sound)
@@ -41,8 +46,12 @@ void SynthVoice::renderNextBlock(juce::AudioBuffer<float>& outputBuffer, int sta
 {
     juce::AudioBuffer<float> synthesisBufferProxy(outputBuffer.getArrayOfWritePointers(), 2, 0, numSamples);
     juce::dsp::AudioBlock<float> audoBlock{ synthesisBufferProxy };
-    osc.process(juce::dsp::ProcessContextReplacing<float>(audoBlock));
-    osc2.process(juce::dsp::ProcessContextReplacing<float>(audoBlock));
+    //osc.process(juce::dsp::ProcessContextReplacing<float>(audoBlock));
+    //osc2.process(juce::dsp::ProcessContextReplacing<float>(audoBlock));
+
+    for (int i = 0; i < oscCount; ++i) {
+        oscillators[i].process(juce::dsp::ProcessContextReplacing<float>(audoBlock));
+    }
 
     gain.process(juce::dsp::ProcessContextReplacing<float>(audoBlock));
     adsr.applyEnvelopeToBuffer(outputBuffer, 0, numSamples);
@@ -65,8 +74,16 @@ void SynthVoice::prepareToPlay(double sampleRate, int samplesPerBlock, int outpu
     spec.maximumBlockSize = samplesPerBlock;
     spec.numChannels = outputChannels;
 
-    osc.prepare(spec);
-    osc2.prepare(spec);
+    for (int i = 0; i < oscCount; ++i) {
+        oscillators[i].initialise([](float x) { return std::sin(x / juce::MathConstants<float>::twoPi); });
+    }
+
+    for (int i = 0; i < oscCount; ++i) {
+        oscillators[i].prepare(spec);
+    }
+
+    //osc.prepare(spec);
+    //osc2.prepare(spec);
     gain.prepare(spec);
     gain.setGainLinear(0.1f);
 
