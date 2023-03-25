@@ -152,6 +152,32 @@ void JsynthAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, juce:
     for (auto i = totalNumInputChannels; i < totalNumOutputChannels; ++i)
         buffer.clear (i, 0, buffer.getNumSamples());
 
+    for (auto midiData : midiMessages) 
+    {
+        auto midiMessage = midiData.getMessage();
+
+        if (midiMessage.isNoteOn()) 
+        {
+            for (int i = 0; i < synth.getNumVoices(); ++i)
+            {
+                if (auto voice = dynamic_cast<SynthVoice*>(synth.getVoice(i)))
+                {
+                    voice->activeNotes += 1;
+                }
+            }
+        }
+        else 
+        {
+            for (int i = 0; i < synth.getNumVoices(); ++i)
+            {
+                if (auto voice = dynamic_cast<SynthVoice*>(synth.getVoice(i)))
+                {
+                    voice->activeNotes -= 1;
+                }
+            }
+        }
+    }
+
     keyboardState.processNextMidiBuffer(midiMessages, 0, buffer.getNumSamples(), true);
     synth.renderNextBlock(buffer, midiMessages, 0, buffer.getNumSamples());
 }

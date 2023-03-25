@@ -28,6 +28,8 @@ public:
     void pitchWheelMoved(int newPitchWheelValue) override;
     void renderNextBlock(juce::AudioBuffer<float>& outputBuffer, int startSample, int numSamples) override;
     void prepareToPlay(double sampleRate, int samplesPerBlock, int ouputChannels);
+
+    int activeNotes = 0;
 private:
     juce::ADSR::Parameters adsrParams;
     juce::ADSR adsr;
@@ -37,6 +39,8 @@ private:
 
                               int oscCount = 3;
     juce::dsp::Oscillator<float> oscillators[3];
+    juce::dsp::Oscillator<float> subOsc{ [](float x) { return SINE_WAVE(x); } };
+
 
     juce::dsp::Gain<float> gain;
     bool isPrepared{ false };

@@ -33,6 +33,8 @@ void SynthVoice::startNote(int midiNoteNumber, float velocity, juce::Synthesiser
 
         oscillators[i].setFrequency(targetFrequency);
     }
+
+    subOsc.setFrequency(juce::MidiMessage::getMidiNoteInHertz(midiNoteNumber - 12));
 }
 
 bool SynthVoice::canPlaySound(juce::SynthesiserSound* sound)
@@ -52,6 +54,10 @@ void SynthVoice::renderNextBlock(juce::AudioBuffer<float>& outputBuffer, int sta
     for (int i = 0; i < oscCount; ++i) {
         oscillators[i].process(juce::dsp::ProcessContextReplacing<float>(audoBlock));
     }
+
+    subOsc.process(juce::dsp::ProcessContextReplacing<float>(audoBlock));
+
+    DBG(this->activeNotes);
 
     gain.process(juce::dsp::ProcessContextReplacing<float>(audoBlock));
     adsr.applyEnvelopeToBuffer(outputBuffer, 0, numSamples);
@@ -81,6 +87,9 @@ void SynthVoice::prepareToPlay(double sampleRate, int samplesPerBlock, int outpu
     for (int i = 0; i < oscCount; ++i) {
         oscillators[i].prepare(spec);
     }
+
+    // Prepare sub oscillator
+    subOsc.prepare(spec);
 
     gain.prepare(spec);
     gain.setGainLinear(0.1f);
