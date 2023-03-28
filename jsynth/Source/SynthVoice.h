@@ -38,8 +38,8 @@ private:
     // juce::dsp::Oscillator<float> osc{ [](float x) { return SAW_WAVE(x); } };
     // juce::dsp::Oscillator<float> osc2{ [](float x) { return SAW_WAVE(x); } };
 
-                              int oscCount = 5;
-    juce::dsp::Oscillator<float> oscillators[5];
+                              int oscCount = 4;
+    juce::dsp::Oscillator<float> oscillators[4];
     juce::dsp::Oscillator<float> subOsc{ [](float x) { return SINE_WAVE(x); } };
 
 
