@@ -28,8 +28,8 @@ void SynthVoice::startNote(int midiNoteNumber, float velocity, juce::Synthesiser
     for (int i = 0; i < oscCount; ++i) {
         auto targetFrequency = juce::MidiMessage::getMidiNoteInHertz(midiNoteNumber);
 
-        if (i % 2 != 0) { targetFrequency -= i*i; }
-        else { targetFrequency += i*i; }
+        if (i % 2 != 0) { targetFrequency -= i; }
+        else { targetFrequency += i; }
 
         oscillators[i].setFrequency(targetFrequency);
     }
@@ -57,7 +57,15 @@ void SynthVoice::renderNextBlock(juce::AudioBuffer<float>& outputBuffer, int sta
 
     subOsc.process(juce::dsp::ProcessContextReplacing<float>(audoBlock));
 
-    DBG(this->activeNotes);
+    //DBG(this->activeNotes);
+    DBG("=== START SAMPLE ===");
+
+    DBG(noteNumbers[0]);
+    DBG(noteNumbers[1]);
+    DBG(noteNumbers[2]);
+    DBG(noteNumbers[3]);
+
+    DBG("=== END SAMPLE ===");
 
     gain.process(juce::dsp::ProcessContextReplacing<float>(audoBlock));
     adsr.applyEnvelopeToBuffer(outputBuffer, 0, numSamples);

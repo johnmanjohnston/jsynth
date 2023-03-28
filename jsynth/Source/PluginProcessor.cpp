@@ -163,9 +163,19 @@ void JsynthAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, juce:
                 if (auto voice = dynamic_cast<SynthVoice*>(synth.getVoice(i)))
                 {
                     voice->activeNotes += 1;
+
+                    for (int i = 0; i < 4; ++i) 
+                    {
+                        if (voice->noteNumbers[i] == 0) 
+                        {
+                            voice->noteNumbers[i] = midiMessage.getNoteNumber();
+                            break;
+                        }
+                    }
                 }
             }
         }
+
         else 
         {
             for (int i = 0; i < synth.getNumVoices(); ++i)
@@ -173,6 +183,15 @@ void JsynthAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, juce:
                 if (auto voice = dynamic_cast<SynthVoice*>(synth.getVoice(i)))
                 {
                     voice->activeNotes -= 1;
+
+                    for (int i = 0; i < 4; ++i)
+                    {
+                        if (voice->noteNumbers[i] == midiMessage.getNoteNumber())
+                        {
+                            voice->noteNumbers[i] = 0;
+                            break;
+                        }
+                    }
                 }
             }
         }

@@ -30,6 +30,7 @@ public:
     void prepareToPlay(double sampleRate, int samplesPerBlock, int ouputChannels);
 
     int activeNotes = 0;
+    int noteNumbers[4];
 private:
     juce::ADSR::Parameters adsrParams;
     juce::ADSR adsr;
@@ -37,8 +38,8 @@ private:
     // juce::dsp::Oscillator<float> osc{ [](float x) { return SAW_WAVE(x); } };
     // juce::dsp::Oscillator<float> osc2{ [](float x) { return SAW_WAVE(x); } };
 
-                              int oscCount = 3;
-    juce::dsp::Oscillator<float> oscillators[3];
+                              int oscCount = 5;
+    juce::dsp::Oscillator<float> oscillators[5];
     juce::dsp::Oscillator<float> subOsc{ [](float x) { return SINE_WAVE(x); } };
 
 
