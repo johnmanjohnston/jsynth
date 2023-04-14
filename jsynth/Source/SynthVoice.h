@@ -11,7 +11,6 @@
 #pragma once
 #include <JuceHeader.h>
 #include "SynthSound.h"
-#include <vector>
 
 #define SINE_WAVE(x) std::sin(x);
 #define SQUARE_WAVE(x) std::sin(x) < 0.0f ? -1.0f : 1.0f;
@@ -29,19 +28,16 @@ public:
     void renderNextBlock(juce::AudioBuffer<float>& outputBuffer, int startSample, int numSamples) override;
     void prepareToPlay(double sampleRate, int samplesPerBlock, int ouputChannels);
 
-    int activeNotes = 0;
-    int noteNumbers[4];
 private:
     juce::ADSR::Parameters adsrParams;
     juce::ADSR adsr;
 
-    // juce::dsp::Oscillator<float> osc{ [](float x) { return SAW_WAVE(x); } };
-    // juce::dsp::Oscillator<float> osc2{ [](float x) { return SAW_WAVE(x); } };
+    juce::dsp::Oscillator<float> osc{ [](float x) { return SAW_WAVE(x); } };
+    juce::dsp::Oscillator<float> osc2{ [](float x) { return SAW_WAVE(x - 12); } };
 
-                              int oscCount = 4;
-    juce::dsp::Oscillator<float> oscillators[4];
     juce::dsp::Oscillator<float> subOsc{ [](float x) { return SINE_WAVE(x); } };
 
+    int activeNotes = 0;
 
     juce::dsp::Gain<float> gain;
     bool isPrepared{ false };
