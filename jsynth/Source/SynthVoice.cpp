@@ -26,8 +26,8 @@ void SynthVoice::startNote(int midiNoteNumber, float velocity, juce::Synthesiser
     adsr.noteOn();
     auto noteFreq = juce::MidiMessage::getMidiNoteInHertz(midiNoteNumber);
 
-    osc.setFrequency(noteFreq);
-    osc2.setFrequency(noteFreq);
+    osc.setFrequency(noteFreq + this->detuneOsc1);
+    osc2.setFrequency(noteFreq + this->detuneOsc2);
 
     subOsc.setFrequency(juce::MidiMessage::getMidiNoteInHertz(midiNoteNumber - 12));
 }
@@ -79,7 +79,7 @@ void SynthVoice::prepareToPlay(double sampleRate, int samplesPerBlock, int outpu
     subOsc.prepare(spec);
 
     gain.prepare(spec);
-    gain.setGainLinear(0.1f);
+    gain.setGainLinear(0.07f);
 
     this->isPrepared = true;
 }

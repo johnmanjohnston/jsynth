@@ -28,16 +28,16 @@ public:
     void renderNextBlock(juce::AudioBuffer<float>& outputBuffer, int startSample, int numSamples) override;
     void prepareToPlay(double sampleRate, int samplesPerBlock, int ouputChannels);
 
+    float detuneOsc1;
+    float detuneOsc2;
+
 private:
     juce::ADSR::Parameters adsrParams;
     juce::ADSR adsr;
 
     juce::dsp::Oscillator<float> osc{ [](float x) { return SAW_WAVE(x); } };
     juce::dsp::Oscillator<float> osc2{ [](float x) { return SAW_WAVE(x - 12); } };
-
     juce::dsp::Oscillator<float> subOsc{ [](float x) { return SINE_WAVE(x); } };
-
-    int activeNotes = 0;
 
     juce::dsp::Gain<float> gain;
     bool isPrepared{ false };
